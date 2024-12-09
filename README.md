@@ -1,7 +1,7 @@
 # **Movie-Character-Identification-With-Perosnalized-Generative-Models**
 
+This repository implements a framework for movie character identification, with a primary objective of analyzing and comparing generative and discriminative models to understand their respective advantages. Specifically, the project utilizes diffusion-based generative models and CLIP-based discriminative models to classify and identify characters in challenging visual environments. The framework includes tools for preparing datasets through automated video frame extraction and organization, training models for character identification tasks, and evaluating their performance across various metrics. This work aims to advance research in character recognition by addressing complex scenarios such as filtered or occluded scenes in movie datasets, while providing insights into the strengths and limitations of both model types.
 
-This repository implements a framework for movie character identification, focusing on leveraging generative and deterministic models to analyze and classify characters in challenging visual environments. The project includes tools for preparing datasets through automated video frame extraction and organization, training models tailored for re-identification tasks, and evaluating their performance on various metrics. This work aims to advance research in character recognition by addressing complex scenarios such as filtered or occluded scenes in movie datasets.
 
 ---
 
