@@ -1,7 +1,7 @@
 # **Movie-Character-Identification-With-Perosnalized-Generative-Models**
 
 
-This repository implements a comprehensive framework for movie character identification and re-identification. The project spans dataset preparation, model training, and evaluation, designed to facilitate research and development in computer vision and machine learning, with a focus on tasks like character recognition in movies.
+This repository implements a framework for movie character identification, focusing on leveraging generative and deterministic models to analyze and classify characters in challenging visual environments. The project includes tools for preparing datasets through automated video frame extraction and organization, training models tailored for re-identification tasks, and evaluating their performance on various metrics. This work aims to advance research in character recognition by addressing complex scenarios such as filtered or occluded scenes in movie datasets.
 
 ---
 
