@@ -75,12 +75,12 @@ To run the script, use the following command:
 ```bash
 python src/frame_extractor.py --csv dataset.csv --video movie.mp4 --output frames/ --category characters --show
 ```
-#### **Arguments**:
---csv: Path to the CSV file containing start and end times and category names.
---video: Path to the video file (e.g., movie.mp4).
---output: Directory where the extracted frames will be saved.
---category: The column in the CSV to use as the folder name (e.g., characters).
---show: (Optional) Displays each frame during extraction for verification.
+#### **Arguments**
+- `--csv`: Path to the CSV file containing start and end times and category names.
+- `--video`: Path to the video file (e.g., `movie.mp4`).
+- `--output`: Directory where the extracted frames will be saved.
+- `--category`: The column in the CSV to use as the folder name (e.g., `characters`).
+- `--show`: *(Optional)* Displays each frame during extraction for verification.
 ---
 #### **Output**:
 The script creates a folder structure like this:
