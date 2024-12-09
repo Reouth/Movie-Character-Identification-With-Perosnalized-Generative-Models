@@ -42,13 +42,11 @@ cd Movie-Character-Identification-With-Personalized-Generative-Models
 
 ## **Dataset Preparation**
 
----
 
 ### **1. Frame Extraction**
 
 This script extracts frames from a video based on time ranges provided in a CSV file.
 
----
 
 #### **How It Works**
 The script reads a CSV file with the following columns:
@@ -56,7 +54,7 @@ The script reads a CSV file with the following columns:
 - `end_time`: End time in `HH:MM:SS` format.
 - `category`: The folder name for extracted frames.
 
----
+
 
 #### **Running the Script**
 ```bash
