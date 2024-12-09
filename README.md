@@ -54,7 +54,6 @@ The script reads a CSV file with the following columns:
 
 The video file is processed to extract frames within the specified time ranges, and these frames are organized into subfolders named after the values in the `category` column.
 
----
 
 #### **Required Inputs**
 1. **CSV File**:
@@ -81,7 +80,7 @@ python src/frame_extractor.py --csv dataset.csv --video movie.mp4 --output frame
 - `--output`: Directory where the extracted frames will be saved.
 - `--category`: The column in the CSV to use as the folder name (e.g., `characters`).
 - `--show`: *(Optional)* Displays each frame during extraction for verification.
----
+
 #### **Output**:
 The script creates a folder structure like this:
 ```
