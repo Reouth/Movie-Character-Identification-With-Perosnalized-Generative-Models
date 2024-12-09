@@ -37,3 +37,22 @@ This work aims to advance research in character recognition by addressing comple
 ```bash
 git clone https://github.com/your-username/Movie-Character-Identification-With-Personalized-Generative-Models.git
 cd Movie-Character-Identification-With-Personalized-Generative-Models
+
+### **Frame Extraction**
+
+The `frame_extractor.py` script extracts video frames based on start and end times provided in a CSV file. The script is flexible and allows specifying a **character names column** to categorize extracted frames into folders for each character or category.
+
+---
+
+#### **Example CSV File**
+The CSV file should contain the following columns:
+- A **category column**: Specifies the folder name for the extracted frames (e.g., `characters`).
+- `start_time`: The start time for frame extraction in `HH:MM:SS` format.
+- `end_time`: The end time for frame extraction in `HH:MM:SS` format.
+
+Example (`dataset.csv`):
+```csv
+characters,start_time,end_time
+CharacterA,00:01:00,00:01:10
+CharacterB,00:02:30,00:02:40
+
