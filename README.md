@@ -42,35 +42,56 @@ cd Movie-Character-Identification-With-Personalized-Generative-Models
 
 ## **Dataset Preparation**
 
-
 ### **1. Frame Extraction**
 
-This script extracts frames from a video based on time ranges provided in a CSV file.
-
+The `frame_extractor.py` script extracts frames from a video based on time ranges provided in a CSV file. The script takes a **CSV file** and a **movie file** as inputs and saves the extracted frames into folders based on the specified category.
 
 #### **How It Works**
 The script reads a CSV file with the following columns:
 - `start_time`: Start time in `HH:MM:SS` format.
 - `end_time`: End time in `HH:MM:SS` format.
-- `category`: The folder name for extracted frames.
+- `category`: The folder name for extracted frames (e.g., character names or scene types).
 
+The video file is processed to extract frames within the specified time ranges, and these frames are organized into subfolders named after the values in the `category` column.
 
+---
 
+#### **Required Inputs**
+1. **CSV File**:
+   The CSV file should specify time ranges and categories for extraction. It must contain the following columns:
+   - `start_time`: Start time in `HH:MM:SS` format.
+   - `end_time`: End time in `HH:MM:SS` format.
+   - `category`: The folder name for extracted frames.
+
+   Example (`dataset.csv`):
+   ```csv
+   characters,start_time,end_time
+   CharacterA,00:01:00,00:01:10
+   CharacterB,00:02:30,00:02:40
+2. **Movie File**:
+   The video file from which frames will be extracted. Supported formats include .mp4, .avi, etc.
 #### **Running the Script**
+To run the script, use the following command:
 ```bash
 python src/frame_extractor.py --csv dataset.csv --video movie.mp4 --output frames/ --category characters --show
 ```
-
-#### **Example CSV File**
-The CSV file should contain the following columns:
-- A **category column**: Specifies the folder name for the extracted frames (e.g., `characters`).
-- `start_time`: The start time for frame extraction in `HH:MM:SS` format.
-- `end_time`: The end time for frame extraction in `HH:MM:SS` format.
-
-Example (`dataset.csv`):
-```csv
-characters,start_time,end_time
-CharacterA,00:01:00,00:01:10
-CharacterB,00:02:30,00:02:40
+#### **Arguments**:
+--csv: Path to the CSV file containing start and end times and category names.
+--video: Path to the video file (e.g., movie.mp4).
+--output: Directory where the extracted frames will be saved.
+--category: The column in the CSV to use as the folder name (e.g., characters).
+--show: (Optional) Displays each frame during extraction for verification.
+---
+#### **Output**:
+The script creates a folder structure like this:
 ```
-=======
+frames/
+├── CharacterA/
+│   ├── CharacterA_frame_0001.jpg
+│   ├── CharacterA_frame_0002.jpg
+│   └── ...
+├── CharacterB/
+│   ├── CharacterB_frame_0001.jpg
+│   ├── CharacterB_frame_0002.jpg
+│   └── ...
+```
