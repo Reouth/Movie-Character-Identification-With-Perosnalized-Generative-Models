@@ -13,9 +13,9 @@ from diffusers.models import AutoencoderKL, UNet2DConditionModel
 from diffusers.schedulers import DDIMScheduler
 from diffusers.utils import logging
 from transformers import CLIPTextModel, CLIPTokenizer
-import data_upload
-import helper_functions
-import new_SD_pipeline
+from src import data_upload
+from src import helper_functions
+from src import new_SD_pipeline
 
 def SD_pretrained_load(SD_MODEL_NAME: str, CLIP_MODEL_NAME: str, device: str, imagic_trained: bool = False):
     """
