@@ -15,7 +15,7 @@ from diffusers.utils import logging
 from transformers import CLIPTextModel, CLIPTokenizer
 from src import data_upload
 from src import helper_functions
-from src import new_SD_pipeline
+from src import SD_pipeline
 
 def SD_pretrained_load(SD_MODEL_NAME: str, CLIP_MODEL_NAME: str, device: str, imagic_trained: bool = False):
     """
