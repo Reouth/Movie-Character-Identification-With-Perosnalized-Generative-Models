@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from typing import Optional, List
+from typing import  List
 from pathlib import Path
 
 def csv_checkpoint(csv_path: str, checkpoint_dir: str) -> str:

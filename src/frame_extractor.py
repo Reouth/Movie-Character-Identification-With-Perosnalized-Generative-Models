@@ -1,3 +1,8 @@
+# This script is adapted from the Imagic example in the diffusers repository.
+# Original file: imagic_train.py from https://github.com/ShivamShrirao/diffusers/tree/main/examples/imagic
+# Licensed under the Apache License 2.0 (https://github.com/ShivamShrirao/diffusers/blob/main/LICENSE).
+
+
 import argparse
 import os
 import logging
@@ -83,14 +88,14 @@ def process_csv(csv_file: str, video_file: str, output_dir: str, category_column
         logging.error(f"Failed to process CSV file: {csv_file}. Error: {e}")
         raise e
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Extract frames from a video based on a CSV file.")
-    parser.add_argument("--csv", required=True, help="Path to the CSV file with category and time data.")
-    parser.add_argument("--video", required=True, help="Path to the video file.")
-    parser.add_argument("--output", required=True, help="Directory to save the extracted frames.")
-    parser.add_argument("--category", required=True, help="The column in the CSV to use as the category.")
-    parser.add_argument("--show", action="store_true", help="Display frames during extraction.")
+    if __name__ == "__main__":
+        parser = argparse.ArgumentParser(description="Extract frames from a video based on a CSV file.")
+        parser.add_argument("--csv", required=True, help="Path to the CSV file with category and time data.")
+        parser.add_argument("--video", required=True, help="Path to the video file.")
+        parser.add_argument("--output", required=True, help="Directory to save the extracted frames.")
+        parser.add_argument("--category", required=True, help="The column in the CSV to use as the category.")
+        parser.add_argument("--show", action="store_true", help="Display frames during extraction.")
 
-    args = parser.parse_args()
+        args = parser.parse_args()
 
-    process_csv(args.csv, args.video, args.output, args.category, args.show)
+        process_csv(args.csv, args.video, args.output, args.category, args.show)
