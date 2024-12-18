@@ -18,7 +18,6 @@ from accelerate.utils import set_seed
 from diffusers import AutoencoderKL, DDPMScheduler, StableDiffusionPipeline, UNet2DConditionModel
 from huggingface_hub import HfFolder, Repository, whoami
 from PIL import Image
-import numpy as np
 from torchvision import transforms
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
