@@ -1,5 +1,5 @@
 import pandas as pd
-import data_upload
+from src import data_upload
 import os
 import shutil
 from pathlib import Path
