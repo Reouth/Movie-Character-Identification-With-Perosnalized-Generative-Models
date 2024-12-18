@@ -1,0 +1,14 @@
+torch==2.0.1  # PyTorch for model and tensor operations
+torchvision==0.15.2  # For image transformations
+transformers==4.33.2  # For CLIP models and tokenizers
+diffusers==0.25.0  # For Stable Diffusion pipelines and schedulers
+accelerate==0.21.0  # For distributed training and model acceleration
+Pillow==9.4.0  # For image processing and manipulation
+numpy==1.23.5  # For numerical computations
+pandas==2.1.0  # For handling CSV files and dataframes
+tqdm==4.66.1  # For progress bars
+matplotlib==3.7.1  # For visualizing frames
+opencv-python==4.8.0.74  # For video frame extraction
+pathlib2==2.3.7.post1  # For path manipulation
+bitsandbytes==0.40.2  # For 8-bit Adam optimization (if enabled)
+huggingface-hub==0.17.0  # For model sharing on Hugging Face Hub
