@@ -141,6 +141,6 @@ python src/imagic_train.py --input_folder <path_to_images> --text_data <path_to_
 ```
 **Arguments:**
 
--`--input_folder`: Directory containing input images.
--`--text_data`: Path to the text file with descriptions.
--`--output_folder`: Directory to save embeddings.
+- `--input_folder`: Directory containing input images.
+- `--text_data`: Path to the text file with descriptions.
+- `--output_folder`: Directory to save embeddings.
