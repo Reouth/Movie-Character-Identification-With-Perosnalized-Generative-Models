@@ -38,6 +38,32 @@ This work aims to advance research in character recognition by addressing comple
 git clone https://github.com/your-username/Movie-Character-Identification-With-Personalized-Generative-Models.git
 cd Movie-Character-Identification-With-Personalized-Generative-Models
 ```
+### **2. Install Dependencies**
+
+#### **For Local Setup**
+1. Create and activate a virtual environment:
+   - **Windows**:
+     ```bash
+     python -m venv env
+     .\env\Scripts\activate
+     ```
+   - **macOS/Linux**:
+     ```bash
+     python3 -m venv env
+     source env/bin/activate
+     ```
+
+2. Install the required libraries:
+   ```bash
+   pip install -r requirements.txt
+#### **For Colab**
+If you are running this project on Google Colab, ensure the following dependencies are installed by adding this to the first cell in your notebook:
+```python
+!pip install -q torch torchvision torchaudio
+!pip install -q git+https://github.com/huggingface/diffusers.git
+!pip install -q accelerate transformers pandas matplotlib opencv-python Pillow
+!pip install -q git+https://github.com/openai/CLIP.git
+
 ---
 
 ## **Dataset Preparation**
