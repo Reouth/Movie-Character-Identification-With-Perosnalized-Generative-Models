@@ -133,10 +133,14 @@ Generate image-text embeddings for the Diffusion Identifier. This can be done ei
 ##### **1. Using Colab**
 Use the `create_image_text_embedding.ipynb` notebook available in the repository to generate embeddings interactively.
 
----
 
 ##### **2. Using Local Script**
 Run the `imagic_train.py` script locally:
 ```bash
 python src/imagic_train.py --input_folder <path_to_images> --text_data <path_to_text_file> --output_folder <output_directory>
 ```
+**Arguments:**
+
+-`--input_folder`: Directory containing input images.
+-`--text_data`: Path to the text file with descriptions.
+-`--output_folder`: Directory to save embeddings.
