@@ -123,7 +123,7 @@ frames/
 ```
 
 ---
-##**Model Training**
+## **Model Training**
 ### **Image-Text Embedding Creation**
 
 Generate image-text embeddings for the Diffusion Identifier. This can be done either using the Colab notebook or locally with the `imagic_train.py` script.
