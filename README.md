@@ -121,3 +121,22 @@ frames/
 │   ├── CharacterB_frame_0002.jpg
 │   └── ...
 ```
+
+---
+##**Model Training**
+### **Image-Text Embedding Creation**
+
+Generate image-text embeddings for the Diffusion Identifier. This can be done either using the Colab notebook or locally with the `imagic_train.py` script.
+
+#### **Usage**
+
+##### **1. Using Colab**
+Use the `create_image_text_embedding.ipynb` notebook available in the repository to generate embeddings interactively.
+
+---
+
+##### **2. Using Local Script**
+Run the `imagic_train.py` script locally:
+```bash
+python src/imagic_train.py --input_folder <path_to_images> --text_data <path_to_text_file> --output_folder <output_directory>
+```
