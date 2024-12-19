@@ -63,6 +63,7 @@ If you are running this project on Google Colab, ensure the following dependenci
 !pip install -q git+https://github.com/huggingface/diffusers.git
 !pip install -q accelerate transformers pandas matplotlib opencv-python Pillow
 !pip install -q git+https://github.com/openai/CLIP.git
+```
 
 ---
 
