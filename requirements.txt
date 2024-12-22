@@ -1,0 +1,26 @@
+# Core Machine Learning Libraries
+torch==2.0.1                  # PyTorch for deep learning models and tensor computations
+torchvision==0.15.2           # PyTorch module for image transformations
+
+# Hugging Face Transformers and Diffusers
+transformers==4.33.2          # For CLIP models and text encoders
+diffusers==0.25.0             # Stable Diffusion pipelines for image generation
+huggingface-hub>=0.19.4,<1.0  # Shared utilities for Hugging Face models (compatible with transformers and diffusers)
+accelerate==0.21.0            # Efficient training and distributed computing
+
+# Image Processing
+Pillow==9.4.0                 # Image handling (e.g., reading, writing, processing)
+opencv-python==4.8.0.74       # Video frame extraction and image processing
+
+# Scientific Computing
+numpy==1.23.5                 # Numerical computations
+pandas==2.1.0                 # Data analysis and CSV handling
+
+# Visualization and Progress
+matplotlib==3.7.1             # Plotting and visualization
+tqdm==4.66.1                  # Progress bars for loops
+
+# Utilities
+pathlib2==2.3.7.post1         # Path manipulation utilities
+bitsandbytes==0.40.2          # Memory-efficient optimization for training (optional)
+
