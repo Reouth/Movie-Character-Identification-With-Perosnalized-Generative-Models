@@ -12,8 +12,6 @@ from src import helper_functions
 from src import SD_pipeline
 
 
-
-
 def multi_image_identifier(imagic_pretrained_path, csv_folder, sd_model_name, clip_model_name, device, image_list,
                                       category_class=False, Imagic_pipe=False, alpha=0, seed: int = 0,
                                       height: Optional[int] = 512, width: Optional[int] = 512, resolution: Optional[int] = 512,
@@ -89,3 +87,16 @@ def conditioned_classifier(parameters, test_image, seed: int = 0, height: Option
 
     return SD_loss
 
+
+def get_pretrained_params(imagic_pipe,imagic_pretrained_path,sd_model_name,clip_model_name,embeds,device):
+    imagic_parameters = data_upload.upload_single_imagic_params(
+        imagic_pretrained_path, embeds, clip_model_name, device, imagic_pipe)
+    if not imagic_pipe:
+        sd_pretrained_model = SD_pipeline.SD_pretrained_load(sd_model_name, clip_model_name, device)
+        pipeline = SD_pipeline.StableDiffusionPipeline(*sd_pretrained_model)
+        parameters = (pipeline, imagic_parameters[1],imagic_parameters[2])
+        pipe_name = 'SD_pipeline'
+    else:
+        parameters = imagic_parameters
+        pipe_name = 'Imagic_pipeline'
+    return parameters, pipe_name

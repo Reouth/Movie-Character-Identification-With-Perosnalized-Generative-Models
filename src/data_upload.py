@@ -120,7 +120,7 @@ def upload_single_imagic_params(path, embeds_file, CLIP_model_name, device, Imag
         print(f"Uploading embeddings for directory: {imagic_pretrained_path}")
         if Imagic_pipe:
             # Load pretrained models
-            pretrained_models = SD_model.SD_pretrained_load(imagic_pretrained_path, CLIP_model_name, device, True)
+            pretrained_models = SD_pipeline.SD_pretrained_load(imagic_pretrained_path, CLIP_model_name, device, True)
             pipeline = SD_pipeline.StableDiffusionPipeline(*pretrained_models)
         else:
             pipeline = None
