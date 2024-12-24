@@ -10,16 +10,6 @@ from datetime import datetime
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def convert_time_to_seconds(time_str: str) -> tuple[str, int]:
-    """Converts a time string (HH:MM:SS) to total seconds."""
-    try:
-        time_obj = datetime.strptime(time_str, "%H:%M:%S").time()
-        total_seconds = time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second
-        return time_str, total_seconds
-    except ValueError as e:
-        logging.error(f"Invalid time format: {time_str}. Expected HH:MM:SS.")
-        raise e
-
 def save_frames(output_dir: str, category: str, video_file: str,
                 start_time: str, end_time: str, show_frame: bool = False) -> None:
     """Extracts and saves video frames within a time range to category-specific folders."""
@@ -66,6 +56,7 @@ def save_frames(output_dir: str, category: str, video_file: str,
     cap.release()
     logging.info(f"Frame extraction completed for category: {category}.")
 
+
 def process_csv(csv_file: str, video_file: str, output_dir: str, category_column: str, show_frame: bool = False) -> None:
     """Processes the input CSV file and extracts frames for each row."""
     try:
@@ -84,14 +75,24 @@ def process_csv(csv_file: str, video_file: str, output_dir: str, category_column
         logging.error(f"Failed to process CSV file: {csv_file}. Error: {e}")
         raise e
 
-    if __name__ == "__main__":
-        parser = argparse.ArgumentParser(description="Extract frames from a video based on a CSV file.")
-        parser.add_argument("--csv", required=True, help="Path to the CSV file with category and time data.")
-        parser.add_argument("--video", required=True, help="Path to the video file.")
-        parser.add_argument("--output", required=True, help="Directory to save the extracted frames.")
-        parser.add_argument("--category", required=True, help="The column in the CSV to use as the category.")
-        parser.add_argument("--show", action="store_true", help="Display frames during extraction.")
+def convert_time_to_seconds(time_str: str) -> tuple[str, int]:
+    """Converts a time string (HH:MM:SS) to total seconds."""
+    try:
+        time_obj = datetime.strptime(time_str, "%H:%M:%S").time()
+        total_seconds = time_obj.hour * 3600 + time_obj.minute * 60 + time_obj.second
+        return time_str, total_seconds
+    except ValueError as e:
+        logging.error(f"Invalid time format: {time_str}. Expected HH:MM:SS.")
+        raise e
 
-        args = parser.parse_args()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Extract frames from a video based on a CSV file.")
+    parser.add_argument("--csv", required=True, help="Path to the CSV file with category and time data.")
+    parser.add_argument("--video", required=True, help="Path to the video file.")
+    parser.add_argument("--output", required=True, help="Directory to save the extracted frames.")
+    parser.add_argument("--category", required=True, help="The column in the CSV to use as the category.")
+    parser.add_argument("--show", action="store_true", help="Display frames during extraction.")
 
-        process_csv(args.csv, args.video, args.output, args.category, args.show)
+    args = parser.parse_args()
+
+    process_csv(args.csv, args.video, args.output, args.category, args.show)

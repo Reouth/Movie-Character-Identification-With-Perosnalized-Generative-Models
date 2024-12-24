@@ -2,45 +2,19 @@ from PIL import Image
 import torch
 from torch.cuda import cudaStatus
 from torch.nn import functional as F
-from typing import List, Optional, Union
+from typing import  Optional, Union
 import os
-from diffusers.models import AutoencoderKL, UNet2DConditionModel
-from diffusers import DiffusionPipeline
-from diffusers.models import AutoencoderKL, UNet2DConditionModel
-from diffusers.schedulers import DDIMScheduler, LMSDiscreteScheduler
-from diffusers.utils import logging
-from transformers import CLIPTextModel, CLIPTokenizer
 
+from diffusers.models import AutoencoderKL, UNet2DConditionModel
 from diffusers.schedulers import DDIMScheduler, LMSDiscreteScheduler
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
-
-import numpy as np
 from torchvision import transforms
 
-# Helper class to track average loss
-class AverageMeter:
-    def __init__(self, name=None):
-        self.name = name
-        self.reset()
 
-    def reset(self):
-        self.sum = self.count = self.avg = 0
 
-    def update(self, val, n=1):
-        """
-        Update the average with a new value.
-
-        Args:
-            val (float): The new value to include in the average.
-            n (int): The weight of the new value (default is 1).
-        """
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-
-# Custom implementation of the Stable Diffusion pipeline
-class StableDiffusionPipeline():
+# Custom implementation of the Stable Diffusion pipeline for Diffusion based editing (Imagic) and Identification model.
+class StableDiffusionPipeline:
     r"""
     Pipeline for image editing and image identification using Stable Diffusion.
     Inherits from `DiffusionPipeline`.
@@ -88,7 +62,7 @@ class StableDiffusionPipeline():
         self.enable_attention_slicing(None)
 
     @torch.no_grad()
-    def generateImage(self,
+    def generate_image(self,
         cond_embeddings,
         seed: int = 0,
         height: Optional[int] = 512,
@@ -163,7 +137,7 @@ class StableDiffusionPipeline():
         return images
 
     @torch.no_grad()
-    def diffusionloss_IM_text(self,
+    def loss_image_text(self,
         text_embeddings: torch.Tensor,
         input_image,
         seed: int = 0,
@@ -174,17 +148,7 @@ class StableDiffusionPipeline():
         num_inference_steps: Optional[int] = 50,
         guidance_scale: float = 7.5
     ):
-        """
-        Compute diffusion loss for text embedding alignment for the task of image identification.
 
-        Args:
-            text_embeddings: Text embeddings to guide generation.
-            input_image: Input image to align with text embeddings.
-            Other parameters are similar to `generateImage`.
-
-        Returns:
-            Average diffusion loss.
-        """
         if height % 8 != 0 or width % 8 != 0:
             raise ValueError(f"`height` and `width` must be divisible by 8, but received {height} and {width}.")
 
@@ -218,8 +182,8 @@ class StableDiffusionPipeline():
         return loss_avg
 
     @torch.no_grad()
-    def diffusionloss_IM_IM(self,
-        image_ID_embeddings: torch.Tensor,
+    def loss_image_image(self,
+        image_id_embeddings: torch.Tensor,
         image,
         seed: int = 0,
         height: Optional[int] = 512,
@@ -229,17 +193,7 @@ class StableDiffusionPipeline():
         num_inference_steps: Optional[int] = 50,
         guidance_scale: float = 7.5
     ):
-        """
-        Compute diffusion loss for Image_text embedding alignment for the task of image identification.
 
-        Args:
-            image_ID_embeddings: Image embeddings to guide generation.
-            image: Input image to align with image embeddings.
-            Other parameters are similar to `generateImage`.
-
-        Returns:
-            Average diffusion loss.
-        """
         if height % 8 != 0 or width % 8 != 0:
             raise ValueError(f"`height` and `width` must be divisible by 8, but received {height} and {width}.")
 
@@ -263,19 +217,19 @@ class StableDiffusionPipeline():
 
         for i, t in tqdm(enumerate(timesteps_tensor)):
             noisy_latents = self.scheduler.add_noise(init_latents, noise, t)
-            noise_pred = self.unet(noisy_latents, t, image_ID_embeddings)['sample']
+            noise_pred = self.unet(noisy_latents, t, image_id_embeddings)['sample']
             loss = F.mse_loss(noise_pred.float(), noise.float(), reduction="mean")
             loss_avg.update(loss.detach(), init_latents.size(0))
 
         return loss_avg
 
-def SD_pretrained_load(SD_MODEL_NAME, CLIP_MODEL_NAME, device, imagic_trained=False):
+def sd_pretrained_load(sd_model_name, clip_model_name, device, imagic_trained=False):
     """
     Load pretrained components for the Stable Diffusion model.
 
     Args:
-        SD_MODEL_NAME (str): Path to the Stable Diffusion model.
-        CLIP_MODEL_NAME (str): Path to the CLIP model.
+        sd_model_name (str): Path to the Stable Diffusion model.
+        clip_model_name (str): Path to the CLIP model.
         device (str): Device to load the models on.
         imagic_trained (bool): Whether to load Imagic-specific paths.
 
@@ -283,13 +237,13 @@ def SD_pretrained_load(SD_MODEL_NAME, CLIP_MODEL_NAME, device, imagic_trained=Fa
         (VAE, text encoder, tokenizer, UNet, scheduler)
     """
     if imagic_trained:
-        vae_path = os.path.join(SD_MODEL_NAME, 'vae')
-        tokenizer_path = os.path.join(SD_MODEL_NAME, 'tokenizer')
-        text_encoder_path = os.path.join(SD_MODEL_NAME, 'text_encoder')
-        unet_path = os.path.join(SD_MODEL_NAME, 'unet')
+        vae_path = os.path.join(sd_model_name, 'vae')
+        tokenizer_path = os.path.join(sd_model_name, 'tokenizer')
+        text_encoder_path = os.path.join(sd_model_name, 'text_encoder')
+        unet_path = os.path.join(sd_model_name, 'unet')
     else:
-        vae_path = unet_path = SD_MODEL_NAME
-        tokenizer_path = text_encoder_path = CLIP_MODEL_NAME
+        vae_path = unet_path = sd_model_name
+        tokenizer_path = text_encoder_path = clip_model_name
 
     vae = AutoencoderKL.from_pretrained(vae_path, subfolder='vae', token=True).to(device)
     tokenizer = CLIPTokenizer.from_pretrained(tokenizer_path)
@@ -304,3 +258,23 @@ def SD_pretrained_load(SD_MODEL_NAME, CLIP_MODEL_NAME, device, imagic_trained=Fa
         set_alpha_to_one=False
     )
     return vae, text_encoder, tokenizer, unet, scheduler,device
+# Helper class to track average loss
+class AverageMeter:
+    def __init__(self, name=None):
+        self.name = name
+        self.reset()
+
+    def reset(self):
+        self.sum = self.count = self.avg = 0
+
+    def update(self, val, n=1):
+        """
+        Update the average with a new value.
+
+        Args:
+            val (float): The new value to include in the average.
+            n (int): The weight of the new value (default is 1).
+        """
+        self.sum += val * n
+        self.count += n
+        self.avg = self.sum / self.count

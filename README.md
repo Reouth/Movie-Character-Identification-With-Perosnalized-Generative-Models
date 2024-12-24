@@ -99,7 +99,7 @@ The video file is processed to extract frames within the specified time ranges, 
 #### **Running the Script**
 To run the script, use the following command:
 ```bash
-python src/frame_extractor.py --csv dataset.csv --video movie.mp4 --output frames/ --category characters --show
+python src/FrameExtractor.py --csv dataset.csv --video movie.mp4 --output frames/ --category characters --show
 ```
 #### **Arguments**
 - `--csv`: Path to the CSV file containing start and end times and category names.
@@ -137,7 +137,7 @@ Use the `create_image_text_embedding.ipynb` notebook available in the repository
 ##### **2. Using Local Script**
 Run the `imagic_train.py` script locally:
 ```bash
-python src/imagic_train.py --input_folder <path_to_images> --text_data <path_to_text_file> --output_folder <output_directory>
+python src/ImagicTrain.py --input_folder <path_to_images> --text_data <path_to_text_file> --output_folder <output_directory>
 ```
 **Arguments:**
 

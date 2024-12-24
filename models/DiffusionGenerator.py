@@ -7,9 +7,9 @@ import torch
 from typing import Optional
 import os
 import gc
-from src import data_upload
-from src import helper_functions
-from src import SD_pipeline
+from src import DataUpload
+from src import HelperFunctions
+
 
 
 
@@ -18,7 +18,7 @@ def multi_image_generator(input_files, output_folder, imagic_pretrained_path, im
                           width: Optional[int] = 512, num_inference_steps: Optional[int] = 50):
 
     for embeds in input_files:
-        parameters, pipe_name = get_pretrained_params(imagic_pipe, imagic_pretrained_path, sd_model_name, clip_model_name, embeds, device)
+        parameters, pipe_name = DataUpload.get_pretrained_params(imagic_pipe, imagic_pretrained_path, sd_model_name, clip_model_name, embeds, device)
 
         gc.collect()
         if torch.cuda.is_available():
@@ -31,8 +31,8 @@ def multi_image_generator(input_files, output_folder, imagic_pretrained_path, im
                     output_dir = os.path.join(output_folder, pipe_name, f"seed_{seed}")
                     os.makedirs(output_dir, exist_ok=True)
 
-                    image_path,_  = helper_functions.generate_image_path(output_dir, embeds, alpha, guidance_scale)
-                    image_exists = helper_functions.image_check(image_path)
+                    image_path,_  = HelperFunctions.generate_image_path(output_dir, embeds, alpha, guidance_scale)
+                    image_exists = HelperFunctions.image_check(image_path)
                     if image_exists:
                         continue
 
@@ -81,20 +81,6 @@ def image_generator(output_folder, parameters, image_name, alpha=0,
         )
 
     images[0].save(os.path.join(output_folder, image_name))
-
-
-def get_pretrained_params(imagic_pipe,imagic_pretrained_path,sd_model_name,clip_model_name,embeds,device):
-    imagic_parameters = data_upload.upload_single_imagic_params(
-        imagic_pretrained_path, embeds, clip_model_name, device, imagic_pipe)
-    if not imagic_pipe:
-        sd_pretrained_model = SD_pipeline.SD_pretrained_load(sd_model_name, clip_model_name, device)
-        pipeline = SD_pipeline.StableDiffusionPipeline(*sd_pretrained_model)
-        parameters = (pipeline, imagic_parameters[1],imagic_parameters[2])
-        pipe_name = 'SD_pipeline'
-    else:
-        parameters = imagic_parameters
-        pipe_name = 'Imagic_pipeline'
-    return parameters, pipe_name
 
 
 

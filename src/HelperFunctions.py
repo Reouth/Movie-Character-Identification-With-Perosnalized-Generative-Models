@@ -1,5 +1,5 @@
 import pandas as pd
-from src import data_upload
+from src import DataUpload
 import os
 import shutil
 from pathlib import Path
@@ -19,18 +19,15 @@ def move_csv_files(source_dir, destination_dir):
             item_path = os.path.join(current_dir, item)
 
             if os.path.isdir(item_path):
-                # Recurse into subdirectories with updated prefix
                 new_prefix = f"{folder_name_prefix}_{item}" if folder_name_prefix else item
                 process_directory(item_path, new_prefix)
             elif item.endswith('.csv'):
-                # Move CSV files while preserving the folder structure
                 destination_folder = os.path.join(destination_dir, folder_name_prefix)
                 if not os.path.exists(destination_folder):
                     os.makedirs(destination_folder)
                 shutil.move(item_path, os.path.join(str(destination_folder), item))
                 print(f"Moved: {item} to {destination_folder}")
 
-    # Start processing from the source directory
     prefix = Path(source_dir).name
     process_directory(source_dir, prefix)
 
@@ -136,7 +133,7 @@ def image_check(item_path):
     flag = False
     if os.path.exists(item_path):
         print(f"File exists: {item_path}")
-        if data_upload.is_image(item_path):
+        if DataUpload.is_image(item_path):
             flag = True
             print(f"File is an image: {item_path}")
         else:

@@ -1,5 +1,5 @@
 # This script is adapted from the Imagic example in the diffusers repository.
-# Original file: imagic_train.py from https://github.com/ShivamShrirao/diffusers/tree/main/examples/imagic
+# Original file: ImagicTrain.py from https://github.com/ShivamShrirao/diffusers/tree/main/examples/imagic
 # Licensed under the Apache License 2.0 (https://github.com/ShivamShrirao/diffusers/blob/main/LICENSE).
 
 import logging
