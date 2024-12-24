@@ -54,8 +54,8 @@ def save_to_csv(loss, df, image_name, csv_file_path):
     df_image = pd.DataFrame(sorted_df, columns=['input_embeds', 'loss'])
     df_image.insert(0, 'GT Image name', image_name)
 
-    df_sd = pd.concat([df, df_image], ignore_index=False)
-    df_sd.to_csv(csv_file_path)
+    df = pd.concat([df, df_image], ignore_index=False)
+    df.to_csv(csv_file_path)
 
 
 def list_csv_files_in_directory(directory_path):
@@ -69,18 +69,14 @@ def list_csv_files_in_directory(directory_path):
         print(f"The directory {directory_path} does not exist.")
         return []
 
-def file_exists(csv_folder,cls):
+def file_exists(csv_folder,filepath):
     csv_list = list_csv_files_in_directory(csv_folder)
-    filepath = f"{cls}_results.csv"
     if filepath in csv_list:
         return True
     else:
         return False
 
-def image_check():
-    image_flag = False
-
-def get_current_csv(csv_folder, cls, test_image, input_embeds_value=None):
+def get_current_csv(csv_folder, cls):
     """
     Check if a test image or embedding exists in a CSV file and return the DataFrame if it exists.
 
@@ -93,11 +89,18 @@ def get_current_csv(csv_folder, cls, test_image, input_embeds_value=None):
     Returns:
         tuple: (image_flag (bool), df_sd (pd.DataFrame), csv_path (str))
     """
-    image_flag = False
-    filepath = f"{cls}_results.csv"
-    csv_path = os.path.join(csv_folder, filepath)
+    filename = f"{cls}_results.csv"
+    csv_path = os.path.join(csv_folder, filename)
 
-    df = pd.read_csv(csv_path)
+    if file_exists(csv_folder, filename):
+        df = pd.read_csv(csv_path)
+    else:
+        df = pd.DataFrame()
+    return df, csv_path
+
+def row_exist(df, test_image, input_embeds_value=None):
+
+    image_flag = False
     df= df.drop(columns=['Unnamed: 0'], errors='ignore')
     df.columns = [col.strip() for col in df.columns]
 
@@ -107,30 +110,18 @@ def get_current_csv(csv_folder, cls, test_image, input_embeds_value=None):
             if not matches.empty:
                 print(f"test_image: {test_image} found in 'GT Image name' column.")
                 image_flag = True
-        elif 'input_SD_embeds' in df.columns:
+        elif 'input_embeds' in df.columns:
             matches = df[
-                (df['GT Image name'] == test_image) & (df['input_SD_embeds'] == input_embeds_value)]
+                (df['GT Image name'] == test_image) & (df['input_embeds'] == input_embeds_value)]
             if not matches.empty:
                 print(f"test_image: {test_image} and {input_embeds_value} found in the same row.")
                 image_flag = True
 
-
-    return image_flag, df, csv_path
+    return image_flag
 
 
 def generate_image_path(image_path, embeds_name, alpha, guidance_scale):
-    """
-    Check if a generated image exists, and if not, prepare for its generation.
 
-    Args:
-        image_path (str): Path to the directory where the image is expected to be found.
-        embeds_name (str): Name of the embedding used.
-        alpha (float): Alpha parameter for generation.
-        guidance_scale (float): Guidance scale parameter for generation.
-
-    Returns:
-        tuple: (flag (bool), item_path (str), image_name (str))
-    """
     print(f"path entered {image_path}")
     image_name = f"{embeds_name}*alpha:{alpha}^GS:{guidance_scale}.jpg"
     embeds_category = embeds_name.rsplit("_", 1)[0]
