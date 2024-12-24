@@ -27,7 +27,7 @@ def multi_image_identifier(imagic_pretrained_path, csv_folder, sd_model_name, cl
         all_files = set(os.listdir(imagic_pretrained_path))
 
     for file in all_files:
-        embeds_files,pipe_name = get_embeds(category_class,imagic_pipe,file,cat_files,alpha,imagic_pretrained_path,sd_model_name,clip_model_name)
+        embeds_files,pipe_name = get_embeds(category_class,imagic_pipe,file,cat_files,alpha,imagic_pretrained_path,sd_model_name,clip_model_name,device)
         csv_dir = os.path.join(csv_folder, pipe_name)
         os.makedirs(csv_dir, exist_ok=True)
         df,csv_file_path = helper_functions.get_current_csv(csv_dir,file)
@@ -90,14 +90,14 @@ def get_pretrained_params(imagic_pipe,imagic_pretrained_path,sd_model_name,clip_
         pipe_name = 'Imagic_pipeline'
     return parameters, pipe_name
 
-def get_embeds(category_class,imagic_pipe,file,cat_files,alpha,imagic_pretrained_path,sd_model_name,clip_model_name):
+def get_embeds(category_class,imagic_pipe,file,cat_files,alpha,imagic_pretrained_path,sd_model_name,clip_model_name,device):
     embeds_files = {}
     if category_class and not imagic_pipe:
          embeds_files = {file:cat_files[file]}
          pipe_name = 'SD_embeds_cat_avg'
     else:
-        parameters, pipe_name = get_pretrained_params(imagic_pipe, imagic_pretrained_path,file, sd_model_name,
-                                                      clip_model_name)
+        parameters, pipe_name = get_pretrained_params(imagic_pipe, imagic_pretrained_path, sd_model_name,
+                                                      clip_model_name,file,device)
         pipeline,target_embeddings, optimized_embeddings = parameters
         embeddings = alpha * target_embeddings + (1 - alpha) * optimized_embeddings
         embeds_files[file] = (pipeline, embeddings)
