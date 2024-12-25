@@ -23,12 +23,12 @@ def multi_image_identifier(imagic_pretrained_path, csv_folder, sd_model_name, cl
         embeds_files,pipe_name = DataUpload.get_embeds(category_class,imagic_pipe,file,cat_files,alpha,imagic_pretrained_path,sd_model_name,clip_model_name,device)
         csv_dir = os.path.join(csv_folder, pipe_name)
         os.makedirs(csv_dir, exist_ok=True)
-        df,csv_file_path = HelperFunctions.get_current_csv(str(csv_dir),file)
+
 
         for image_name, image, _ in image_list:
             cls = image_name.rsplit("_", 1)[0]
+            df, csv_file_path = HelperFunctions.get_current_csv(str(csv_dir), cls)
             image_flag = HelperFunctions.row_exist(df,cls,file)
-
             if not image_flag:
                 loss = conditioned_diffusion_identifier(
                     embeds_files, image, seed, height, width, resolution, num_inference_steps, guidance_scale
