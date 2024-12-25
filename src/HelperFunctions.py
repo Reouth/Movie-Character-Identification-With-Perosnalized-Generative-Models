@@ -52,7 +52,7 @@ def save_to_csv(loss, df, image_name, csv_file_path,reverse=False):
     df_image.insert(0, 'GT Image name', image_name)
 
     df = pd.concat([df, df_image], ignore_index=False)
-    df.to_csv(csv_file_path)
+    df.to_csv(csv_file_path,  index=False)
 
 
 def list_csv_files_in_directory(directory_path):
@@ -98,7 +98,6 @@ def get_current_csv(csv_folder, cls):
 def row_exist(df, test_image, input_embeds_value=None):
 
     image_flag = False
-    df= df.drop(columns=['Unnamed: 0'], errors='ignore')
     df.columns = [col.strip() for col in df.columns]
 
     if 'GT Image name' in df.columns:
