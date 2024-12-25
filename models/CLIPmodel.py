@@ -47,9 +47,8 @@ class CLIPPipeline:
             unsorted_sim[name] = sim.item()
 
         # Sort the similarity scores in descending order
-        sorted_sim = sorted(unsorted_sim.items(), key=lambda kv: kv[1], reverse=True)
 
-        return sorted_sim
+        return unsorted_sim
 
     def images_to_embeddings(self, path):
 

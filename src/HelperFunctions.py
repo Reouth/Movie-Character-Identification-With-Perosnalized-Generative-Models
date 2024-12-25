@@ -34,7 +34,7 @@ def move_csv_files(source_dir, destination_dir):
     print("Operation completed.")
 
 
-def save_to_csv(loss, df, image_name, csv_file_path):
+def save_to_csv(loss, df, image_name, csv_file_path,reverse=False):
     """
     Save similarity scores and image details to a CSV file.
 
@@ -45,7 +45,7 @@ def save_to_csv(loss, df, image_name, csv_file_path):
         csv_file_path (str): Path to save the updated CSV file.
     """
     # Sort similarity scores by value
-    sorted_df = sorted(loss.items(), key=lambda kv: kv[1])
+    sorted_df = sorted(loss.items(), key=lambda kv: kv[1], reverse=reverse)
 
     # Create a DataFrame for the current image's data
     df_image = pd.DataFrame(sorted_df, columns=['input_embeds', 'loss'])
