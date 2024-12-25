@@ -46,7 +46,7 @@ def conditioned_diffusion_identifier(parameters, test_image, seed: int = 0, heig
 
     loss = {}
 
-    for params,embeds_name in parameters.items():
+    for embeds_name,params in parameters.items():
         pipeline, embeddings = params
         with torch.autocast("cuda"), torch.inference_mode():
             loss_avg = pipeline.loss_image_image(
