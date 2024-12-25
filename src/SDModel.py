@@ -136,66 +136,39 @@ class StableDiffusionPipeline:
 
         return images
 
+
     @torch.no_grad()
-    def loss_image_text(self,
-        text_embeddings: torch.Tensor,
-        input_image,
-        seed: int = 0,
-        height: Optional[int] = 512,
-        width: Optional[int] = 512,
-        resolution: Optional[int] = 512,
-        center_crop: bool = False,
-        num_inference_steps: Optional[int] = 50,
-        guidance_scale: float = 7.5
-    ):
+    def loss(self,
+             cond_embeddings: torch.Tensor,
+             image,
+             seed: int = 0,
+             height: Optional[int] = 512,
+             width: Optional[int] = 512,
+             resolution: Optional[int] = 512,
+             center_crop: bool = False,
+             num_inference_steps: Optional[int] = 50,
+             guidance_scale: float = 7.5
+             ):
 
         if height % 8 != 0 or width % 8 != 0:
             raise ValueError(f"`height` and `width` must be divisible by 8, but received {height} and {width}.")
 
-        image_transforms = transforms.Compose([
-            transforms.Resize(resolution, interpolation=transforms.InterpolationMode.BILINEAR),
-            transforms.CenterCrop(resolution) if center_crop else transforms.RandomCrop(resolution),
-            transforms.ToTensor(),
-            transforms.Normalize([0.5], [0.5])
-        ])
-
-        init_image = image_transforms(input_image)[None].to(self.device, dtype=torch.float32)
-        init_latents = self.vae.encode(init_image).latent_dist.sample()
-        init_latents = 0.18215 * init_latents
-
-        self.scheduler.set_timesteps(num_inference_steps)
-        timesteps_tensor = self.scheduler.timesteps.to(self.device)
-        torch.manual_seed(seed)
-        noise = torch.randn_like(init_latents)
-
-        loss_avg = AverageMeter()
-
-        for i, t in tqdm(enumerate(timesteps_tensor)):
-            noisy_latents = self.scheduler.add_noise(init_latents, noise, t)
-            latent_input = torch.cat([noisy_latents] * 2)
-            noise_pred = self.unet(latent_input, t, text_embeddings)['sample']
-            noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
-            noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
-            loss = F.mse_loss(noise_pred.float(), noise.float(), reduction="mean")
-            loss_avg.update(loss.detach(), init_latents.size(0))
-
-        return loss_avg
-
-    @torch.no_grad()
-    def loss_image_image(self,
-        image_id_embeddings: torch.Tensor,
-        image,
-        seed: int = 0,
-        height: Optional[int] = 512,
-        width: Optional[int] = 512,
-        resolution: Optional[int] = 512,
-        center_crop: bool = False,
-        num_inference_steps: Optional[int] = 50,
-        guidance_scale: float = 7.5
-    ):
-
-        if height % 8 != 0 or width % 8 != 0:
-            raise ValueError(f"`height` and `width` must be divisible by 8, but received {height} and {width}.")
+        # Determine if classifier-free guidance is used
+        do_classifier_free_guidance = guidance_scale > 1.0
+        if do_classifier_free_guidance:
+            uncond_tokens = [""]
+            max_length = self.tokenizer.model_max_length
+            uncond_input = self.tokenizer(
+                uncond_tokens,
+                padding="max_length",
+                max_length=max_length,
+                truncation=True,
+                return_tensors="pt",
+            )
+            uncond_embeddings = self.text_encoder(uncond_input.input_ids.to(self.device))[0]
+            embeddings = torch.cat([uncond_embeddings, cond_embeddings])
+        else:
+            embeddings = cond_embeddings
 
         image_transforms = transforms.Compose([
             transforms.Resize(resolution, interpolation=transforms.InterpolationMode.BILINEAR),
@@ -217,11 +190,140 @@ class StableDiffusionPipeline:
 
         for i, t in tqdm(enumerate(timesteps_tensor)):
             noisy_latents = self.scheduler.add_noise(init_latents, noise, t)
-            noise_pred = self.unet(noisy_latents, t, image_id_embeddings)['sample']
+            noise_pred = self.unet(noisy_latents, t, embeddings)['sample']
+            if do_classifier_free_guidance:
+                noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
+                noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+
             loss = F.mse_loss(noise_pred.float(), noise.float(), reduction="mean")
             loss_avg.update(loss.detach(), init_latents.size(0))
 
         return loss_avg
+
+    # def loss_image_text(self,
+    #     text_embeddings: torch.Tensor,
+    #     input_image,
+    #     seed: int = 0,
+    #     height: Optional[int] = 512,
+    #     width: Optional[int] = 512,
+    #     resolution: Optional[int] = 512,
+    #     center_crop: bool = False,
+    #     num_inference_steps: Optional[int] = 50,
+    #     guidance_scale: float = 7.5
+    # ):
+    #
+    #     if height % 8 != 0 or width % 8 != 0:
+    #         raise ValueError(f"`height` and `width` must be divisible by 8, but received {height} and {width}.")
+    #
+    #     do_classifier_free_guidance = guidance_scale > 1.0
+    #     if do_classifier_free_guidance:
+    #         uncond_tokens = [""]
+    #         max_length = self.tokenizer.model_max_length
+    #         uncond_input = self.tokenizer(
+    #             uncond_tokens,
+    #             padding="max_length",
+    #             max_length=max_length,
+    #             truncation=True,
+    #             return_tensors="pt",
+    #         )
+    #         uncond_embeddings = self.text_encoder(uncond_input.input_ids.to(self.device))[0]
+    #         embeddings = torch.cat([uncond_embeddings, text_embeddings])
+    #     else:
+    #         embeddings = text_embeddings
+    #
+    #     image_transforms = transforms.Compose([
+    #         transforms.Resize(resolution, interpolation=transforms.InterpolationMode.BILINEAR),
+    #         transforms.CenterCrop(resolution) if center_crop else transforms.RandomCrop(resolution),
+    #         transforms.ToTensor(),
+    #         transforms.Normalize([0.5], [0.5])
+    #     ])
+    #
+    #     init_image = image_transforms(input_image)[None].to(self.device, dtype=torch.float32)
+    #     init_latents = self.vae.encode(init_image).latent_dist.sample()
+    #     init_latents = 0.18215 * init_latents
+    #
+    #     self.scheduler.set_timesteps(num_inference_steps)
+    #     timesteps_tensor = self.scheduler.timesteps.to(self.device)
+    #     torch.manual_seed(seed)
+    #     noise = torch.randn_like(init_latents)
+    #
+    #     loss_avg = AverageMeter()
+    #
+    #     for i, t in tqdm(enumerate(timesteps_tensor)):
+    #         noisy_latents = self.scheduler.add_noise(init_latents, noise, t)
+    #         latent_input = torch.cat([noisy_latents] * 2)
+    #         noise_pred = self.unet(latent_input, t, embeddings)['sample']
+    #         if do_classifier_free_guidance:
+    #             noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
+    #             noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+    #
+    #         loss = F.mse_loss(noise_pred.float(), noise.float(), reduction="mean")
+    #         loss_avg.update(loss.detach(), init_latents.size(0))
+    #
+    #     return loss_avg
+    #
+    # @torch.no_grad()
+    # def loss_image_image(self,
+    #     image_id_embeddings: torch.Tensor,
+    #     image,
+    #     seed: int = 0,
+    #     height: Optional[int] = 512,
+    #     width: Optional[int] = 512,
+    #     resolution: Optional[int] = 512,
+    #     center_crop: bool = False,
+    #     num_inference_steps: Optional[int] = 50,
+    #     guidance_scale: float = 7.5
+    # ):
+    #
+    #     if height % 8 != 0 or width % 8 != 0:
+    #         raise ValueError(f"`height` and `width` must be divisible by 8, but received {height} and {width}.")
+    #
+    #         # Determine if classifier-free guidance is used
+    #     do_classifier_free_guidance = guidance_scale > 1.0
+    #     if do_classifier_free_guidance:
+    #         uncond_tokens = [""]
+    #         max_length = self.tokenizer.model_max_length
+    #         uncond_input = self.tokenizer(
+    #             uncond_tokens,
+    #             padding="max_length",
+    #             max_length=max_length,
+    #             truncation=True,
+    #             return_tensors="pt",
+    #         )
+    #         uncond_embeddings = self.text_encoder(uncond_input.input_ids.to(self.device))[0]
+    #         embeddings = torch.cat([uncond_embeddings, image_id_embeddings])
+    #     else:
+    #         embeddings = image_id_embeddings
+    #
+    #     image_transforms = transforms.Compose([
+    #         transforms.Resize(resolution, interpolation=transforms.InterpolationMode.BILINEAR),
+    #         transforms.CenterCrop(resolution) if center_crop else transforms.RandomCrop(resolution),
+    #         transforms.ToTensor(),
+    #         transforms.Normalize([0.5], [0.5])
+    #     ])
+    #
+    #     init_image = image_transforms(image)[None].to(self.device, dtype=torch.float32)
+    #     init_latents = self.vae.encode(init_image).latent_dist.sample()
+    #     init_latents = 0.18215 * init_latents
+    #
+    #     self.scheduler.set_timesteps(num_inference_steps)
+    #     timesteps_tensor = self.scheduler.timesteps.to(self.device)
+    #     torch.manual_seed(seed)
+    #     noise = torch.randn_like(init_latents)
+    #
+    #     loss_avg = AverageMeter()
+    #
+    #     for i, t in tqdm(enumerate(timesteps_tensor)):
+    #         noisy_latents = self.scheduler.add_noise(init_latents, noise, t)
+    #         noise_pred = self.unet(noisy_latents, t, embeddings)['sample']
+    #         if do_classifier_free_guidance:
+    #             noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
+    #             noise_pred = noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+    #
+    #         loss = F.mse_loss(noise_pred.float(), noise.float(), reduction="mean")
+    #         loss_avg.update(loss.detach(), init_latents.size(0))
+    #
+    #     return loss_avg
 
 def sd_pretrained_load(sd_model_name, clip_model_name, device, imagic_trained=False):
     """
