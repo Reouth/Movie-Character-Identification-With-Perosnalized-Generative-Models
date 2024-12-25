@@ -4,7 +4,7 @@ from src import DataUpload
 
 class CLIPPipeline:
     """
-    A class for handling CLIP-based image embeddings and classification.
+    A class for handling CLIP-based image embeddings and image character identification.
 
     Attributes:
         model_CLIP (torch.nn.Module): Pretrained CLIP model.
@@ -18,16 +18,7 @@ class CLIPPipeline:
         self.device = device
 
     def image_identifier(self, test_image, clip_embeddings):
-        """
-        Perform classification on a test image by comparing it with stored embeddings.
 
-        Args:
-            test_image (PIL.Image): Input test image for classification.
-            clip_embeddings (dict): Dictionary of embeddings for comparison.
-
-        Returns:
-            list: Sorted list of similarity scores and associated labels.
-        """
         # Extract embedding names and stack them into a single tensor
         embed_names = list(clip_embeddings.keys())
         clip_id_embeds = torch.cat([clip_embeddings[name] for name in clip_embeddings]).to(self.device)

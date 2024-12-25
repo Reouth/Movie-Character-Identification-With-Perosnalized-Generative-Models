@@ -17,7 +17,6 @@ from torchvision import transforms
 class StableDiffusionPipeline:
     r"""
     Pipeline for image editing and image identification using Stable Diffusion.
-    Inherits from `DiffusionPipeline`.
 
     Attributes:
         vae: Variational Auto-Encoder (VAE) for encoding/decoding images to/from latent space.

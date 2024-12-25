@@ -31,7 +31,7 @@ def multi_image_identifier(imagic_pretrained_path, csv_folder, sd_model_name, cl
             image_flag = HelperFunctions.row_exist(df,cls,file)
             if not image_flag:
                 loss = conditioned_diffusion_identifier(
-                    embeds_files, image, seed, height, width, resolution, num_inference_steps, guidance_scale
+                    embeds_files[file], image, seed, height, width, resolution, num_inference_steps, guidance_scale
                 )
                 HelperFunctions.save_to_csv(loss, df, image_name, csv_file_path)
 
