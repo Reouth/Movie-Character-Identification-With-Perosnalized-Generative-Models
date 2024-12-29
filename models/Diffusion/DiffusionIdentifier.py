@@ -2,8 +2,7 @@ import torch
 from typing import Optional
 import os
 import gc
-from src import DataUpload
-from src import HelperFunctions
+from handlers import EmbeddingsHandler, CSVHandler
 
 
 def multi_image_identifier(imagic_pretrained_path, csv_folder, sd_model_name, clip_model_name, device, image_list,
@@ -12,7 +11,7 @@ def multi_image_identifier(imagic_pretrained_path, csv_folder, sd_model_name, cl
                                       num_inference_steps: Optional[int] = 50, guidance_scale: float = 7.5):
 
     if category_class and not imagic_pipe:
-        cat_files = DataUpload.get_category_params(imagic_pipe, imagic_pretrained_path, clip_model_name, sd_model_name, device)
+        cat_files = EmbeddingsHandler.get_category_params(imagic_pipe, imagic_pretrained_path, clip_model_name, sd_model_name, device)
         all_files = list(cat_files.keys())
 
     else:
@@ -20,20 +19,20 @@ def multi_image_identifier(imagic_pretrained_path, csv_folder, sd_model_name, cl
         all_files = set(os.listdir(imagic_pretrained_path))
 
     for file in all_files:
-        embeds_files,pipe_name = DataUpload.get_embeds(category_class,imagic_pipe,file,cat_files,alpha,imagic_pretrained_path,sd_model_name,clip_model_name,device)
+        embeds_files,pipe_name = EmbeddingsHandler.get_embeds(category_class,imagic_pipe,file,cat_files,alpha,imagic_pretrained_path,sd_model_name,clip_model_name,device)
         csv_dir = os.path.join(csv_folder, pipe_name)
         os.makedirs(csv_dir, exist_ok=True)
 
 
         for image_name, image, _ in image_list:
             cls = image_name.rsplit("_", 1)[0]
-            df, csv_file_path = HelperFunctions.get_current_csv(str(csv_dir), cls)
-            image_flag = HelperFunctions.row_exist(df,cls,file)
+            df, csv_file_path = CSVHandler.get_current_csv(str(csv_dir), cls)
+            image_flag = CSVHandler.row_exist(df,cls,file)
             if not image_flag:
                 loss = conditioned_diffusion_identifier(
                     embeds_files, image, seed, height, width, resolution, num_inference_steps, guidance_scale
                 )
-                HelperFunctions.save_to_csv(loss, df, image_name, csv_file_path)
+                CSVHandler.save_to_csv(loss, df, image_name, csv_file_path)
 
 def conditioned_diffusion_identifier(parameters, test_image, seed: int = 0, height: Optional[int] = 512, width: Optional[int] = 512,
                             resolution: Optional[int] = 512, num_inference_steps: Optional[int] = 50,

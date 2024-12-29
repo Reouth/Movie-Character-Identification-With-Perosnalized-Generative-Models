@@ -1,6 +1,6 @@
 import clip
 import torch
-from src import DataUpload
+from handlers import ImageHandler
 
 class CLIPPipeline:
     """
@@ -44,7 +44,7 @@ class CLIPPipeline:
     def images_to_embeddings(self, path):
 
         clip_embeddings = {}
-        images = DataUpload.upload_images(path)  # Load images using helper function
+        images = ImageHandler.upload_images(path)  # Load images using helper function
 
         for name, img, _ in images:
             clip_embeddings[name] = self.image_to_embedding(img)

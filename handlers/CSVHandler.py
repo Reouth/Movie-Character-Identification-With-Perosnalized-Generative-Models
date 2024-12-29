@@ -1,8 +1,8 @@
 import pandas as pd
-from src import DataUpload
 import os
 import shutil
 from pathlib import Path
+import pathlib
 
 def merge_csv_results(base_path,folders_names,output_dir):
     # Get the list of csv files from the first folder (assuming all folders have the same csv files)
@@ -124,7 +124,7 @@ def get_current_csv(csv_folder, cls):
 
 def row_exist(df, test_image, input_embeds_value=None):
 
-    image_flag = False
+    row_flag = False
     df.columns = [col.strip() for col in df.columns]
 
     if 'GT Image name' in df.columns:
@@ -132,39 +132,18 @@ def row_exist(df, test_image, input_embeds_value=None):
             matches = df[df['GT Image name'] == test_image]
             if not matches.empty:
                 print(f"test_image: {test_image} found in 'GT Image name' column.")
-                image_flag = True
+                row_flag = True
         elif 'input_embeds' in df.columns:
             matches = df[
                 (df['GT Image name'] == test_image) & (df['input_embeds'] == input_embeds_value)]
             if not matches.empty:
                 print(f"test_image: {test_image} and {input_embeds_value} found in the same row.")
-                image_flag = True
+                row_flag = True
 
-    return image_flag
+    return row_flag
 
+def upload_csvs(csv_dir_path):
 
-def generate_image_path(image_path, embeds_name, alpha, guidance_scale):
-
-    print(f"path entered {image_path}")
-    image_name = f"{embeds_name}*alpha:{alpha}^GS:{guidance_scale}.jpg"
-    embeds_category = embeds_name.rsplit("_", 1)[0]
-    category_folder = os.path.join(image_path, embeds_category)
-    os.makedirs(category_folder, exist_ok=True)
-    item_path = os.path.join(category_folder, image_name)
-    return item_path, image_name
-
-
-def image_check(item_path):
-
-    flag = False
-    if os.path.exists(item_path):
-        print(f"File exists: {item_path}")
-        if DataUpload.is_image(item_path):
-            flag = True
-            print(f"File is an image: {item_path}")
-        else:
-            print(f"File is not an image: {item_path}")
-    else:
-        print(f"File does not exist: {item_path}")
-
-    return flag
+    csv_dir = pathlib.Path(csv_dir_path)
+    csv_paths = list(csv_dir.glob("*.csv"))  # Collect all CSV files with .csv extension
+    return csv_paths

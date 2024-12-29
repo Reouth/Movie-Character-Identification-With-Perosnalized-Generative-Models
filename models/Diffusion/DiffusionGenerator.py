@@ -7,8 +7,7 @@ import torch
 from typing import Optional
 import os
 import gc
-from src import DataUpload
-from src import HelperFunctions
+from handlers import EmbeddingsHandler, ImageHandler
 
 
 
@@ -18,7 +17,7 @@ def multi_image_generator(input_files, output_folder, imagic_pretrained_path, im
                           width: Optional[int] = 512, num_inference_steps: Optional[int] = 50):
 
     for embeds in input_files:
-        parameters, pipe_name = DataUpload.get_pretrained_params(imagic_pipe, imagic_pretrained_path, sd_model_name, clip_model_name, embeds, device)
+        parameters, pipe_name = EmbeddingsHandler.get_pretrained_params(imagic_pipe, imagic_pretrained_path, sd_model_name, clip_model_name, embeds, device)
 
         gc.collect()
         if torch.cuda.is_available():
@@ -31,8 +30,8 @@ def multi_image_generator(input_files, output_folder, imagic_pretrained_path, im
                     output_dir = os.path.join(output_folder, pipe_name, f"seed_{seed}")
                     os.makedirs(output_dir, exist_ok=True)
 
-                    image_path,_  = HelperFunctions.generate_image_path(output_dir, embeds, alpha, guidance_scale)
-                    image_exists = HelperFunctions.image_check(image_path)
+                    image_path,_  = ImageHandler.generate_image_path(output_dir, embeds, alpha, guidance_scale)
+                    image_exists = ImageHandler.is_image(image_path)
                     if image_exists:
                         continue
 
