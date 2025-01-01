@@ -136,7 +136,7 @@ Generate image-text embeddings and weight parameters for finetuned model for the
 
 - **Using Colab**
 
-Use the `create_image_text_embedding.ipynb` notebook available in the repository to generate embeddings interactively.
+Use the `create_image_text_embedding.ipynb` notebook.
 
 - **Using Local Script**
 
@@ -149,3 +149,26 @@ python handlers/ImagicTrain.py --input_folder <path_to_images> --text_data <path
 - `--input_folder`: Directory containing input images.
 - `--text_data`: Path to the text file with descriptions.
 - `--output_folder`: Directory to save embeddings.
+
+### **2. Diffusion Identification Model**
+
+Train a model to classify characters using embeddings generated in the previous step.
+
+#### **Usage**
+
+- **Using Colab**
+  
+Use the `IdentifierModels.ipynb` notebook.
+
+2. Using Local Script:
+
+```bash
+Copy code
+python models/Diffusion/DiffusionIdentifier.py --embeddings <path_to_embeddings> --labels <path_to_labels> --output_model <output_directory>
+   ```
+
+**Arguments:**
+
+--embeddings: Path to embeddings.
+--labels: Labels for the embeddings.
+--output_model: Directory for the trained model.
