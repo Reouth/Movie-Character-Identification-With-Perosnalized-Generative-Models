@@ -190,6 +190,8 @@ python models/Diffusion/DiffusionGenerator.py --text_file <path_to_text_file> --
 --text_file: File with textual descriptions.
 --output_folder: Directory to save images.
 
+---
+
 ## **CLIP-Based Models**
 CLIP-based discriminative model for character identification. Below are the steps for training and usage.
 
