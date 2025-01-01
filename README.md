@@ -289,11 +289,10 @@ python MetricsCalc.py topk \
 
 - **Outputs**
   
-For each value of K in --k_range, a CSV file is created in the `--output_folder`:
-
-Contains Top-K accuracy for each class.
-
-Includes overall Top-K accuracy across all classes.
+   For each value of K in --k_range, a CSV file is created in the `--output_folder`:
+   
+    - Contains Top-K accuracy for each class.
+    - Includes overall Top-K accuracy across all classes.
 
 ## **2. Mean Average Precision (mAP)**
 Calculate mAP to evaluate how well the model ranks relevant result.
@@ -320,9 +319,8 @@ python MetricsCalc.py map \
 
 - **Outputs**
   
-A CSV file named average_precision_results.csv is created in the `--output_folder`:
-
-Contains Average Precision (AP) for each query.
-
-Includes Mean Average Precision (mAP) across all queries.
+   A CSV file named average_precision_results.csv is created in the `--output_folder`:
+  
+     - Contains Average Precision (AP) for each query.
+     - Includes Mean Average Precision (mAP) across all queries.
 
