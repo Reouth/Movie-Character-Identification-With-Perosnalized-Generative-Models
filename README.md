@@ -161,20 +161,23 @@ Use the `IdentifierModels.ipynb` notebook.
 
 - **Using Local Script**
 Run the `DiffusionIdentifier.py` script locally:
+
 ```bash
-python DiffusionGenerator.py --input_files <path_to_input_files> \
-    --output_folder <path_to_output_folder> \
-    --imagic_pretrained_path <path_to_model> \
-    --imagic_pipe \
+python DiffusionIdentifier.py --imagic_pretrained_path <path_to_embeddings> \
+    --csv_folder <path_to_csv_output> \
     --sd_model_name <stable_diffusion_model> \
     --clip_model_name <clip_model_name> \
-    --seed_range 0 10 \
-    --alpha_range 0.0 1.0 \
-    --guidance_scale_range 7.0 8.0 \
+    --image_list <path_to_image_list> \
+    --category_class \
+    --imagic_pipe \
+    --alpha 0.5 \
+    --seed 42 \
     --height 512 \
     --width 512 \
-    --num_inference_steps 50
-   ```
+    --resolution 512 \
+    --num_inference_steps 50 
+```
+
 
 **Arguments:**
 
@@ -192,9 +195,21 @@ Use the DiffusionImageGenerator.ipynb notebook.
 - **Using Local Script**
 Run the `DiffusionGenerator.py` script locally:
 
+
 ```bash
-python models/Diffusion/DiffusionGenerator.py --text_file <path_to_text_file> --output_folder <output_directory>
-```
+python DiffusionGenerator.py --input_files <path_to_input_files> \
+    --output_folder <path_to_output_folder> \
+    --imagic_pretrained_path <path_to_model> \
+    --imagic_pipe \
+    --sd_model_name <stable_diffusion_model> \
+    --clip_model_name <clip_model_name> \
+    --seed_range 0 10 \
+    --alpha_range 0.0 1.0 \
+    --guidance_scale_range 7.0 8.0 \
+    --height 512 \
+    --width 512 \
+    --num_inference_steps 50
+   ```
 
 **Arguments:**
 
