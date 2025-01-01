@@ -123,16 +123,15 @@ frames/
 ```
 
 ---
-## **Model Training**
-This repository supports two models for character identification: Diffusion-based generative models and CLIP-based discriminative models. Below are the steps for training and usage.
 
+## **Diffusion-Based Models**
 
-### **Diffusion-Based Models**
+Diffusion-based generative models for character identification. Below are the steps for training and usage.
 
-#### **1. Weight Fine-Tuning and Image-Text Embedding Generation**
+### **1. Weight Fine-Tuning and Image-Text Embedding Generation**
 
 Generate image-text embeddings and weight parameters for finetuned model for the Diffusion Identifier. 
-##### **Usage**
+#### **Usage**
 
 - **Using Colab**
 
@@ -150,18 +149,18 @@ python handlers/ImagicTrain.py --input_folder <path_to_images> --text_data <path
 - `--text_data`: Path to the text file with descriptions.
 - `--output_folder`: Directory to save embeddings.
 
-#### **2. Diffusion Identification Model**
+### **2. Diffusion Identification Model**
 
 Train a model to classify characters using embeddings generated in the previous step.
 
-#### **Usage**
+### **Usage**
 
 - **Using Colab**
   
-Use the `DiffusionIdentifier.py` notebook.
+Use the `IdentifierModels.ipynb` notebook.
 
-- **Using Local Script:**
-Run the `imagic_train.py` script locally:
+- **Using Local Script**
+Run the `DiffusionIdentifier.py` script locally:
 ```bash
 python models/Diffusion/DiffusionIdentifier.py --embeddings <path_to_embeddings> --labels <path_to_labels> --output_model <output_directory>
    ```
@@ -171,3 +170,49 @@ python models/Diffusion/DiffusionIdentifier.py --embeddings <path_to_embeddings>
 --embeddings: Path to embeddings.
 --labels: Labels for the embeddings.
 --output_model: Directory for the trained model.
+
+### **3. Diffusion Generating Images Model**
+Generate images using the trained diffusion model.
+### **Usage**
+
+- **Using Colab**
+Use the DiffusionImageGenerator.ipynb notebook.
+
+- **Using Local Script**
+Run the `DiffusionGenerator.py` script locally:
+
+```bash
+python models/Diffusion/DiffusionGenerator.py --text_file <path_to_text_file> --output_folder <output_directory>
+```
+
+**Arguments:**
+
+--text_file: File with textual descriptions.
+--output_folder: Directory to save images.
+
+## **CLIP-Based Models**
+CLIP-based discriminative model for character identification. Below are the steps for training and usage.
+
+### **Image Identification Model**
+Classify characters from real or generated images using CLIP.
+
+### **Usage**
+
+- **Using Colab**
+
+Use the `IdentifierModels.ipynb` notebook.
+
+- **Using Local Script**
+Run the `CLIPIdentifier.py` script locally:
+
+```bash
+Copy code
+python models/CLIP/CLIPIdentifier.py --images <path_to_images> --labels <path_to_labels> --output_model <output_directory>
+```
+
+**Arguments:**
+
+--images: Path to input images.
+--labels: File with image labels.
+--output_model: Directory for the trained model.
+
