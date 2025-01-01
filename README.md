@@ -9,6 +9,8 @@ The framework includes tools for:
 
 This work aims to advance research in character recognition by addressing complex scenarios such as filtered or occluded scenes in movie datasets, while providing insights into the strengths and limitations of both model types.
 
+It is designed to hnadle complex scenarios, including filtered or occluded scenes in movie datasets
+
 ---
 
 ## **Features**
@@ -18,16 +20,11 @@ This work aims to advance research in character recognition by addressing comple
    - Categorization of frames based on customizable attributes (e.g., characters, scenes).
 
 2. **Model Training**:
-   - **Generative Models**: Diffusion-based approaches for generating and identifying character embeddings.
-   - **Discriminative Models**: CLIP-based approaches for embedding and classification tasks.
+   - **Generative Models**: Diffusion-based approaches for generating and identifying character ID embeddings.
+   - **Discriminative Models**: CLIP-based approache foridentifying character ID images.
 
 3. **Evaluation and Analysis**:
-   - Metrics for assessing accuracy, precision, recall, and other performance indicators.
-   - Visual tools for comparing model outputs.
-
-4. **Research Applications**:
-   - Designed for complex scenarios, including filtered or occluded scenes in movie datasets.
-   - Facilitates experimentation with character identification models.
+   - Metrics: TOPK and mAP evaluation.
 
 ---
 
