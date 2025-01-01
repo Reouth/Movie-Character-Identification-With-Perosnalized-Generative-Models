@@ -134,11 +134,11 @@ This repository supports two models for character identification: Diffusion-base
 Generate image-text embeddings and weight parameters for finetuned model for the Diffusion Identifier. 
 ##### **Usage**
 
--- **Using Colab**
+- **Using Colab**
 
 Use the `create_image_text_embedding.ipynb` notebook available in the repository to generate embeddings interactively.
 
--- **Using Local Script**
+- **Using Local Script**
 
 Run the `imagic_train.py` script locally:
 ```bash
