@@ -158,12 +158,11 @@ Train a model to classify characters using embeddings generated in the previous 
 
 - **Using Colab**
   
-Use the `IdentifierModels.ipynb` notebook.
+Use the `DiffusionIdentifier.py` notebook.
 
 - **Using Local Script:**
-
+Run the `imagic_train.py` script locally:
 ```bash
-Copy code
 python models/Diffusion/DiffusionIdentifier.py --embeddings <path_to_embeddings> --labels <path_to_labels> --output_model <output_directory>
    ```
 
