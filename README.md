@@ -280,12 +280,14 @@ python MetricsCalc.py topk \
     --pred_column loss
 ```
 - **Note:**
---clip_csv: (Optional) Use this flag for CLIP model results (default assumes SD results).
---avg: (Optional) Use this flag to calculate average accuracy over all embeddings.
---pred_column: (Optional) Column used for predictions (e.g., loss for SD or scores for CLIP). Default is loss.
+
+  `--clip_csv`: (Optional) Use this flag for CLIP model results (default assumes SD results).
+  `--avg`: (Optional) Use this flag to calculate average accuracy over all embeddings.
+  `--pred_column`: (Optional) Column used for predictions (e.g., loss for SD or scores for CLIP). Default is loss.
 
 - **Outputs**
-For each value of K in --k_range, a CSV file is created in the --output_folder:
+  
+For each value of K in --k_range, a CSV file is created in the `--output_folder`:
 Contains Top-K accuracy for each class.
 Includes overall Top-K accuracy across all classes.
 
@@ -310,10 +312,11 @@ python MetricsCalc.py map \
 ```
 
 - **Note:**
---clip_csv: (Optional) Use this flag for CLIP model results (default assumes SD results).
+  `--clip_csv`: (Optional) Use this flag for CLIP model results (default assumes SD results).
 
 - **Outputs**
-A CSV file named average_precision_results.csv is created in the --output_folder:
+  
+A CSV file named average_precision_results.csv is created in the `--output_folder`:
 Contains Average Precision (AP) for each query.
 Includes Mean Average Precision (mAP) across all queries.
 
