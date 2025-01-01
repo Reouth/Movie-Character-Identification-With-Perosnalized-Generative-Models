@@ -291,7 +291,7 @@ python MetricsCalc.py topk \
     - Contains Top-K accuracy for each class.
     - Includes overall Top-K accuracy across all classes.
 
-## **2. Mean Average Precision (mAP)**
+### **2. Mean Average Precision (mAP)**
 Calculate mAP to evaluate how well the model ranks relevant result.
 
 #### **Usage**
