@@ -126,7 +126,7 @@ frames/
 ## **Model Training**
 This repository supports two models for character identification: Diffusion-based generative models and CLIP-based discriminative models. Below are the steps for training and usage.
 
----
+
 ### **Diffusion-Based Models**
 
 #### **1. Weight Fine-Tuning and Image-Text Embedding Generation**
@@ -150,7 +150,7 @@ python handlers/ImagicTrain.py --input_folder <path_to_images> --text_data <path
 - `--text_data`: Path to the text file with descriptions.
 - `--output_folder`: Directory to save embeddings.
 
-### **2. Diffusion Identification Model**
+#### **2. Diffusion Identification Model**
 
 Train a model to classify characters using embeddings generated in the previous step.
 
@@ -160,7 +160,7 @@ Train a model to classify characters using embeddings generated in the previous 
   
 Use the `IdentifierModels.ipynb` notebook.
 
-2. Using Local Script:
+- **Using Local Script:**
 
 ```bash
 Copy code
