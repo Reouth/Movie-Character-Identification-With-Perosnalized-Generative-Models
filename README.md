@@ -56,6 +56,7 @@ cd Movie-Character-Identification-With-Personalized-Generative-Models
 2. Install the required libraries:
    ```bash
    pip install -r requirements.txt
+   ```
 #### **For Colab**
 If you are running this project on Google Colab, ensure the following dependencies are installed by adding this to the first cell in your notebook:
 ```python
@@ -135,19 +136,33 @@ Generate image-text embeddings and weight parameters for finetuned model for the
 
 - **Using Colab**
 
-Use the `create_image_text_embedding.ipynb` notebook.
+Use the `CreateImageTextEmbedding.ipynb` notebook.
 
 - **Using Local Script**
 
-Run the `imagic_train.py` script locally:
-```bash
-python handlers/ImagicTrain.py --input_folder <path_to_images> --text_data <path_to_text_file> --output_folder <output_directory>
-```
-**Arguments:**
+Run the `ImagicTrain.py` script locally:
 
-- `--input_folder`: Directory containing input images.
-- `--text_data`: Path to the text file with descriptions.
-- `--output_folder`: Directory to save embeddings.
+```bash
+python ImagicTrain.py \
+    --pretrained_model_name_or_path <path_to_pretrained_model> \
+    --input_image <path_to_input_image> \
+    --target_text <text_describing_output> \
+    --output_dir <path_to_output_directory> \
+    --resolution 512 \
+    --center_crop \
+    --train_batch_size 4 \
+    --emb_train_steps 500 \
+    --max_train_steps 1000 \
+    --gradient_accumulation_steps 1 \
+    --emb_learning_rate 0.001 \
+    --learning_rate 0.000001 \
+    --use_8bit_adam \
+    --scale_lr \
+    --seed 42 \
+    --mixed_precision fp16 \
+    --push_to_hub \
+    --hub_model_id <hub_model_name>
+```
 
 ### **2. Diffusion Identification Model**
 
@@ -178,13 +193,6 @@ python DiffusionIdentifier.py --imagic_pretrained_path <path_to_embeddings> \
     --num_inference_steps 50 
 ```
 
-
-**Arguments:**
-
---embeddings: Path to embeddings.
---labels: Labels for the embeddings.
---output_model: Directory for the trained model.
-
 ### **3. Diffusion Generating Images Model**
 Generate images using the trained diffusion model.
 ### **Usage**
@@ -211,13 +219,7 @@ python DiffusionGenerator.py --input_files <path_to_input_files> \
     --num_inference_steps 50
    ```
 
-**Arguments:**
-
---text_file: File with textual descriptions.
---output_folder: Directory to save images.
-
 ---
-
 ## **CLIP-Based Models**
 CLIP-based discriminative model for character identification. Below are the steps for training and usage.
 
@@ -234,13 +236,9 @@ Use the `IdentifierModels.ipynb` notebook.
 Run the `CLIPIdentifier.py` script locally:
 
 ```bash
-Copy code
-python models/CLIP/CLIPIdentifier.py --images <path_to_images> --labels <path_to_labels> --output_model <output_directory>
+python CLIPIdentifier.py --input_dir <path_to_images> \
+    --output_dir <path_to_csv_results> \
+    --image_list <path_to_image_list> \
+    --model_name ViT-B/32 \
+    --device cuda
 ```
-
-**Arguments:**
-
---images: Path to input images.
---labels: File with image labels.
---output_model: Directory for the trained model.
-
