@@ -124,17 +124,21 @@ frames/
 
 ---
 ## **Model Training**
-### **Image-Text Embedding Creation**
+This repository supports two models for character identification: Diffusion-based generative models and CLIP-based discriminative models. Below are the steps for training and usage.
 
-Generate image-text embeddings for the Diffusion Identifier. This can be done either using the Colab notebook or locally with the `imagic_train.py` script.
+---
+### **Diffusion-Based Models**
 
-#### **Usage**
+#### **1. Weight Fine-Tuning and Image-Text Embedding Generation**
 
-##### **1. Using Colab**
+Generate image-text embeddings and weight parameters for finetuned model for the Diffusion Identifier. 
+##### **Usage**
+
+-- ** Using Colab**
 Use the `create_image_text_embedding.ipynb` notebook available in the repository to generate embeddings interactively.
 
 
-##### **2. Using Local Script**
+-- **2. Using Local Script**
 Run the `imagic_train.py` script locally:
 ```bash
 python handlers/ImagicTrain.py --input_folder <path_to_images> --text_data <path_to_text_file> --output_folder <output_directory>
