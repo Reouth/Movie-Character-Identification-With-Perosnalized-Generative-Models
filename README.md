@@ -9,7 +9,7 @@ The framework includes tools for:
 
 This work aims to advance research in character recognition by addressing complex scenarios such as filtered or occluded scenes in movie datasets, while providing insights into the strengths and limitations of both model types.
 
-It is designed to hnadle complex scenarios, including filtered or occluded scenes in movie datasets
+Designed to handle complex scenarios, including filtered or occluded scenes in movie datasets
 
 ---
 
