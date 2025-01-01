@@ -69,7 +69,7 @@ If you are running this project on Google Colab, ensure the following dependenci
 
 ### **1. Frame Extraction**
 
-The `frame_extractor.py` script extracts frames from a video based on time ranges provided in a CSV file. The script takes a **CSV file** and a **movie file** as inputs and saves the extracted frames into folders based on the specified category.
+The `FrameExtractor.py` script extracts frames from a video based on time ranges provided in a CSV file. The script takes a **CSV file** and a **movie file** as inputs and saves the extracted frames into folders based on the specified category.
 
 #### **How It Works**
 The script reads a CSV file with the following columns:
