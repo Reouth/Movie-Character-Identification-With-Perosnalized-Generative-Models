@@ -169,7 +169,7 @@ python ImagicTrain.py \
 
 Train a model to classify characters using embeddings generated in the previous step.
 
-### **Usage**
+#### **Usage**
 
 - **Using Colab**
   
@@ -199,7 +199,7 @@ python DiffusionIdentifier.py --imagic_pretrained_path <path_to_embeddings> \
 
 Generate images using the trained diffusion model.
 
-### **Usage**
+#### **Usage**
 
 - **Using Colab**
   
@@ -234,14 +234,14 @@ CLIP-based discriminative model for character identification. Below are the step
 
 Classify characters from real or generated images (eg. Diffusion Generator images) using CLIP.
 
-### **Usage**
+#### **Usage**
 
 - **Using Colab**
 
 Use the `IdentifierModels.ipynb` notebook.
 
 - **Using Local Script**
-- 
+  
 Run the `CLIPIdentifier.py` script locally:
 
 ```bash
@@ -251,3 +251,69 @@ python CLIPIdentifier.py --input_dir <path_to_images> \
     --model_name ViT-B/32 \
     --device cuda
 ```
+---
+
+## **Evaluation**
+Evaluate the performance of models using metrics such as Top-K Accuracy and Mean Average Precision (mAP). 
+These metrics assess the ability of embeddings to classify characters correctly and rank relevant results.
+
+### **1. Top-K Accuracy**
+Calculate Top-K accuracy to evaluate how often the correct class appears in the top K predictions.
+
+#### **Usage**
+
+- **Using Colab**
+
+Use the `SimilarityCompare.ipynb` notebook.
+
+- **Using Local Script**
+  
+Run the MetricsCalc.py script with the topk subcommand locally:
+
+``` bash
+python MetricsCalc.py topk \
+    --input_folder <path_to_csv_results> \
+    --output_folder <path_to_output_results> \
+    --k_range 5 \
+    --clip_csv \
+    --avg \
+    --pred_column loss
+```
+- **Note:**
+--clip_csv: (Optional) Use this flag for CLIP model results (default assumes SD results).
+--avg: (Optional) Use this flag to calculate average accuracy over all embeddings.
+--pred_column: (Optional) Column used for predictions (e.g., loss for SD or scores for CLIP). Default is loss.
+
+- **Outputs**
+For each value of K in --k_range, a CSV file is created in the --output_folder:
+Contains Top-K accuracy for each class.
+Includes overall Top-K accuracy across all classes.
+
+## **2. Mean Average Precision (mAP)**
+Calculate mAP to evaluate how well the model ranks relevant result.
+
+#### **Usage**
+
+- **Using Colab**
+
+Use the `SimilarityCompare.ipynb` notebook.
+
+- **Using Local Script**
+
+Run the MetricsCalc.py script with the map subcommand locally:
+
+```bash
+python MetricsCalc.py map \
+    --input_folder <path_to_csv_results> \
+    --output_folder <path_to_output_results> \
+    --clip_csv
+```
+
+- **Note:**
+--clip_csv: (Optional) Use this flag for CLIP model results (default assumes SD results).
+
+- **Outputs**
+A CSV file named average_precision_results.csv is created in the --output_folder:
+Contains Average Precision (AP) for each query.
+Includes Mean Average Precision (mAP) across all queries.
+
