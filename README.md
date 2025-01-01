@@ -100,7 +100,7 @@ The video file is processed to extract frames within the specified time ranges, 
 #### **Running the Script**
 To run the script, use the following command:
 ```bash
-python handlers/FrameExtractor.py --csv dataset.csv --video movie.mp4 --output frames/ --category characters --show
+python preprocessing/FrameExtractor.py --csv dataset.csv --video movie.mp4 --output frames/ --category characters --show
 ```
 #### **Arguments**
 - `--csv`: Path to the CSV file containing start and end times and category names.
@@ -132,6 +132,7 @@ Diffusion-based generative models for character identification. Below are the st
 ### **1. Weight Fine-Tuning and Image-Text Embedding Generation**
 
 Generate image-text embeddings and weight parameters for finetuned model for the Diffusion Identifier. 
+
 #### **Usage**
 
 - **Using Colab**
@@ -175,6 +176,7 @@ Train a model to classify characters using embeddings generated in the previous 
 Use the `IdentifierModels.ipynb` notebook.
 
 - **Using Local Script**
+- 
 Run the `DiffusionIdentifier.py` script locally:
 
 ```bash
@@ -194,13 +196,17 @@ python DiffusionIdentifier.py --imagic_pretrained_path <path_to_embeddings> \
 ```
 
 ### **3. Diffusion Generating Images Model**
+
 Generate images using the trained diffusion model.
+
 ### **Usage**
 
 - **Using Colab**
+  
 Use the DiffusionImageGenerator.ipynb notebook.
 
 - **Using Local Script**
+  
 Run the `DiffusionGenerator.py` script locally:
 
 
@@ -220,10 +226,12 @@ python DiffusionGenerator.py --input_files <path_to_input_files> \
    ```
 
 ---
+
 ## **CLIP-Based Model**
 CLIP-based discriminative model for character identification. Below are the steps for training and usage.
 
 ### **1. Image Identification Model**
+
 Classify characters from real or generated images (eg. Diffusion Generator images) using CLIP.
 
 ### **Usage**
@@ -233,6 +241,7 @@ Classify characters from real or generated images (eg. Diffusion Generator image
 Use the `IdentifierModels.ipynb` notebook.
 
 - **Using Local Script**
+- 
 Run the `CLIPIdentifier.py` script locally:
 
 ```bash
