@@ -312,6 +312,7 @@ python MetricsCalc.py map \
 ```
 
 - **Note:**
+- 
   `--clip_csv`: (Optional) Use this flag for CLIP model results (default assumes SD results).
 
 - **Outputs**
