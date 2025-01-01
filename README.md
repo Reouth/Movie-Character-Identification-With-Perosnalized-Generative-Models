@@ -223,7 +223,7 @@ python DiffusionGenerator.py --input_files <path_to_input_files> \
 ## **CLIP-Based Model**
 CLIP-based discriminative model for character identification. Below are the steps for training and usage.
 
-### **Image Identification Model**
+### **1. Image Identification Model**
 Classify characters from real or generated images (eg. Diffusion Generator images) using CLIP.
 
 ### **Usage**
