@@ -97,7 +97,7 @@ The video file is processed to extract frames within the specified time ranges, 
 #### **Running the Script**
 To run the script, use the following command:
 ```bash
-python preprocessing/FrameExtractor.py --csv dataset.csv --video movie.mp4 --output frames/ --category characters --show
+python FrameExtractor.py --csv dataset.csv --video movie.mp4 --output frames/ --category characters --show
 ```
 #### **Arguments**
 - `--csv`: Path to the CSV file containing start and end times and category names.
